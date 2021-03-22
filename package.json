@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "core-js": "^3.9.1",
+    "cross-env": "^7.0.3",
     "element-ui": "^2.15.1",
     "nuxt": "^2.15.3",
     "nuxt-property-decorator": "^2.9.1",

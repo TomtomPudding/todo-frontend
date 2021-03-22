@@ -1,9 +1,12 @@
+const environment = process.env.NODE_ENV || 'local'
+const env = require(`./env/${environment}.ts`)
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
 
   router: {
-    base: '/todo-frontend/'
+    base: env.BASE_URL
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -18,7 +21,7 @@ export default {
       { hid: 'description', name: 'description', content: '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/nuxt-project-sample/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '${env.BASE_URL}favicon.ico' }
     ]
   },
 
