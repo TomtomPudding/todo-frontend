@@ -1,0 +1,179 @@
+syntax = "proto3";
+package grpc.todo.admin;
+option java_package = "com.grpc.api";
+
+//  string ではデフォルト値は空文字列である．
+//  bytes ではデフォルト値は空バイト列である．
+//  bool ではデフォルト値は false である．
+//  数値型ではデフォルト値はゼロである．
+//  列挙型 (enum) ではデフォルト値は最初に定義されている列挙値であり，これは 0 でなければならない．
+
+service ProjectService {
+  // サーバーからクライアントにレスポンスを送り続ける
+  rpc Search(ProjectSearchRequest) returns (stream ProjectSearchResponse);
+  rpc SearchAll(ProjectSearchAllRequest) returns (stream ProjectSearchAllResponse);
+  rpc Update(ProjectUpdateRequest) returns (ProjectUpdateResponse);
+  rpc Register(ProjectRegisterRequest) returns (ProjectUpdateResponse);
+  rpc Delete(ProjectDeleteRequest) returns (DeleteResponse);
+}
+
+
+service ToDoService {
+  rpc Update(ToDoUpdateRequest) returns (ToDoUpdateResponse);
+  rpc Register(ToDoRegisterRequest) returns (ToDoUpdateResponse);
+  rpc Delete(ToDoDeleteRequest) returns (DeleteResponse);
+}
+
+service GroupService {
+  rpc Update(GroupUpdateRequest) returns (GroupUpdateResponse);
+  rpc Register(GroupRegisterRequest) returns (GroupUpdateResponse);
+  rpc Delete(GroupDeleteRequest) returns (DeleteResponse);
+}
+
+// ログイン状態チェックをサーバで行う
+// project
+message ProjectSearchRequest {
+  string id = 1;
+}
+
+message ProjectSearchAllRequest {
+  ProjectType type = 1;
+  Color color = 2;
+  ProjectStatus status = 3;
+}
+
+message ProjectRegisterRequest {
+  string name = 1;
+}
+
+message ProjectUpdateRequest {
+  string id = 1;
+  string name = 2;
+}
+
+message ProjectDeleteRequest {
+  string id = 1;
+}
+
+message ProjectSearchResponse {
+  string id = 1;
+  string name = 2;
+  repeated ProjectGroup groups = 3;
+  ProjectType type = 4;
+}
+
+message ProjectSearchAllResponse {
+  repeated ProjectAllTitle projects = 1;
+}
+
+message ProjectAllTitle {
+  string id = 1;
+  string name = 2;
+  ProjectType type = 3;
+}
+
+message ProjectUpdateResponse {
+  string id = 1;
+  string name = 2;
+}
+
+message ProjectGroup {
+  string groupId = 1;
+  string name = 2;
+  repeated ToDo todos = 3;
+}
+
+// todo
+message ToDoRegisterRequest {
+  string projectId = 1;
+  string groupId = 2;
+  string title = 3;
+  string content = 4;
+}
+
+message ToDoUpdateRequest {
+  string projectId = 1;
+  string todoId = 2;
+  string moveGroupId = 3;
+  string title = 4;
+  string content = 5;
+}
+
+message ToDoDeleteRequest {
+  string projectId = 1;
+  string todoId = 2;
+}
+
+message ToDoUpdateResponse {
+  string projectId = 1;
+  string groupId = 2;
+  string todoId = 3;
+  string title = 4;
+  string content = 5;
+}
+
+message ToDo {
+  string id = 1;
+  string title = 2;
+  string content = 3;
+}
+
+// group
+message GroupUpdateRequest {
+  string projectId = 1;
+  string groupId = 2;
+  string name = 3;
+  string content = 4;
+  int32 position = 5;
+}
+
+message GroupRegisterRequest {
+  string projectId = 1;
+  string name = 2;
+  string content = 3;
+  int32 position = 4;
+}
+
+message GroupDeleteRequest {
+  string projectId = 1;
+  string groupId = 2;
+}
+
+message GroupUpdateResponse {
+  string projectId = 1;
+  string groupId = 2;
+  string name = 3;
+  string content = 4;
+}
+
+message DeleteResponse {
+  string message = 1;
+}
+
+enum Color {
+  UNKNOWN_COLOR = 0;
+  GRAY = 1;
+  LIGHT_GRAY = 2;
+  SKY_BLUE = 3;
+  CYAN = 4;
+  RED = 5;
+  PINK = 6;
+  MAGENTA = 7;
+  VIOLET = 8;
+  TURQUOISE = 9;
+  OLIVE = 10;
+  LIME = 11;
+  LIME_GREEN = 12;
+  BLACK = 13;
+}
+
+enum ProjectType {
+  UNKNOWN_TYPE = 0;
+  PRIVATE = 1;
+  COMMUNITY = 2;
+}
+
+enum ProjectStatus {
+  OPEN = 0;
+  CLOSE = 1;
+}
